@@ -47,7 +47,7 @@ const Footer = () => {
         {/* RIGHT: Download CV Button */}
         <div className="w-full md:w-auto">
           <a
-            href="/path-to-your-cv.pdf" // Ensure your CV is in the 'public' folder
+            href="/Profile.pdf" // Ensure your CV is in the 'public' folder
             download="Faouzi_Haourigui_CV.pdf"
             className="flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] active:scale-95 group"
           >
