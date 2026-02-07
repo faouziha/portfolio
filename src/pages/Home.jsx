@@ -8,7 +8,7 @@ import Navbar from "../components/Navbar";
 import CertificateCard from "../components/CertificateCard";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 
 const Home = () => {
   const [profileData, setProfileData] = useState({ content: "", avatar: "" });
@@ -28,8 +28,14 @@ const Home = () => {
         const [heroRes, projectsRes, skillsRes, certsRes] = await Promise.all([
           supabase.from("profile").select("content, avatar_url").single(),
           supabase.from("projects").select("*"),
-          supabase.from("skills").select("*").order("proficiency_level", { ascending: false }),
-          supabase.from("certificates").select("*").order("issue_date", { ascending: false }),
+          supabase
+            .from("skills")
+            .select("*")
+            .order("proficiency_level", { ascending: false }),
+          supabase
+            .from("certificates")
+            .select("*")
+            .order("issue_date", { ascending: false }),
         ]);
 
         // 3. Update States (Added the missing certificates update)
@@ -104,8 +110,11 @@ const Home = () => {
           <Skills skills={skills} />
         </div>
 
-        {/* Certificates Section */}
-        <section id="certificates" className="relative py-24 px-6 max-w-7xl mx-auto">
+        {/* Certificates Section - REDUCED TOP PADDING */}
+        <section
+          id="certificates"
+          className="relative pt-12 pb-24 px-6 max-w-7xl mx-auto"
+        >
           <div className="flex flex-col md:flex-row items-center gap-6 mb-16">
             <div className="space-y-2 text-center md:text-left">
               <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">
