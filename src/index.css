@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-[#020617] text-slate-200;
+    position: relative;
+    min-height: 100vh;
+    z-index: 0;
+  }
+
+  /* FULL BODY TERMINAL DATA FLOW */
+  body::before {
+    /* vertical binary + hex stream — duplicated for a seamless loop */
+    content: "1010101010101010\A0101010101010101\A0x46 0x61 0x6F 0x6F 0x20 10101010\A0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\A1010101010101010\A0101010101010101\A0x6F 0x6F 0x20 0x31 0x30\A00110001\A00110000\A1010101010101010\A0101010101010101\A0x46 0x61 0x78\A01100110\A10111010\A0101010101\A1010101010101010\A0101010101010101\A0x20 0x31 0x30\A00110001\A00110000" "1010101010101010\A0101010101010101\A0x46 0x61 0x6F 0x6F 0x20 10101010\A0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0\A1010101010101010\A0101010101010101\A0x6F 0x6F 0x20 0x31 0x30\A00110001\A00110000\A1010101010101010\A0101010101010101\A0x46 0x61 0x78\A01100110\A10111010\A0101010101\A1010101010101010\A0101010101010101\A0x20 0x31 0x30\A00110001\A00110000";
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* make the pseudo-element twice the viewport height and animate by 50% to loop seamlessly */
+    height: 200vh;
+    display: block;
+    font-family: 'Courier New', Courier, monospace;
+    /* larger text as requested */
+    font-size: 20px;
+    line-height: 22px;
+    color: rgba(34, 197, 94, 0.10);
+    white-space: pre-wrap;
+    word-break: break-all;
+    pointer-events: none;
+    z-index: -1;
+    /* flow text into narrow vertical columns across the width */
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    column-width: 28px;
+    column-gap: 12px;
+    overflow: hidden;
+    /* vertical scroll animation; moves up by exactly half the element height */
+    animation: terminalScroll 28s linear infinite;
+    text-shadow: 0 0 6px rgba(34, 197, 94, 0.28);
+  }
+
+  /* SCANLINE OVERLAY */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.1) 50%
+    ), linear-gradient(
+        90deg, 
+        rgba(255, 0, 0, 0.01), 
+        rgba(0, 255, 0, 0.01), 
+        rgba(0, 0, 255, 0.01)
+    );
+    background-size: 100% 4px, 3px 100%;
+    z-index: 99; /* Higher to give everything a CRT look */
+    pointer-events: none;
+  }
+}
+
+@keyframes terminalScroll {
+  /* move the vertical stream downward */
+  from { transform: translateY(0); }
+  to { transform: translateY(-50%); }
+}
+
+@keyframes scanline {
+  0% { top: -10%; }
+  100% { top: 110%; }
+}
+.animate-scanline {
+  animation: scanline 4s linear infinite;
+}
+
+@keyframes enter {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes leave {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(100%); opacity: 0; }
+}
+
+.animate-enter {
+  animation: enter 0.4s ease-out forwards;
+}
+
+.animate-leave {
+  animation: leave 0.4s ease-in forwards;
+}
