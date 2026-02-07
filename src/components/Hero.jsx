@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DecryptText from "./DecryptText";
+import { Terminal } from "lucide-react";
 
 const Hero = ({ description, avatar }) => {
   const [time, setTime] = useState("");
@@ -73,12 +74,23 @@ const Hero = ({ description, avatar }) => {
           </div>
 
           <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
-            <button className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] active:scale-95">
+            {/* Primary Action: Scroll to Projects */}
+            <a
+              href="#projects"
+              className="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] active:scale-95 text-center"
+            >
               LOAD_PROJECTS
-            </button>
-            <button className="px-8 py-3 bg-slate-800/50 hover:bg-slate-700 text-white font-bold rounded-xl border border-slate-700 transition-all active:scale-95">
-              CONTACT_ME
-            </button>
+            </a>
+
+            {/* Secondary Action: Scroll to Contact */}
+            <a
+              href="#contact"
+              className="px-8 py-3 bg-slate-800/50 hover:bg-slate-700 text-white font-bold rounded-xl border border-slate-700 transition-all active:scale-95 text-center"
+            >
+              <span className="flex items-center gap-2">
+                <Terminal size={16} /> CONTACT_ME
+              </span>
+            </a>
           </div>
         </div>
 
