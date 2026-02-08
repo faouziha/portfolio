@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import './App.css'
 import Home from './pages/Home'
-import { Analytics } from '@vercel/analytics/react';
+import { inject } from '@vercel/analytics';
+
+// Initialize immediately outside the component
+inject();
 
 function App() {
   
