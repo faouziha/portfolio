@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DecryptText from "./DecryptText";
 import { Terminal, FileDown } from "lucide-react";
+import HeroTerminal from "./HeroTerminal";
 
 const Hero = ({ description, avatar }) => {
   const [time, setTime] = useState("");
@@ -67,11 +68,7 @@ const Hero = ({ description, avatar }) => {
             Pentester
           </h2>
 
-          <div className="bg-slate-900/40 backdrop-blur-md border border-white/5 p-6 rounded-2xl shadow-2xl group hover:border-blue-500/30 transition-all duration-500">
-            <p className="text-lg text-slate-300 leading-relaxed font-light italic">
-              {description || "Initializing bio from database..."}
-            </p>
-          </div>
+          <HeroTerminal bio={description} />
 
           <div className="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
             {/* Primary Action: Scroll to Projects */}
