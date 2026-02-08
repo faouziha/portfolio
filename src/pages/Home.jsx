@@ -9,6 +9,8 @@ import CertificateCard from "../components/CertificateCard";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
 import { Toaster } from "react-hot-toast";
+import Education from "../components/Education";
+import Experience from "../components/Experience";
 
 const Home = () => {
   const [profileData, setProfileData] = useState({ content: "", avatar: "" });
@@ -17,6 +19,10 @@ const Home = () => {
   const [certificates, setCertificates] = useState([]); // State was here, but not updated
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [education, setEducation] = useState([]);
+  const [experience, setExperience] = useState([]);
+  const [showAllProjects, setShowAllProjects] = useState(false);
+  const [showAllCerts, setShowAllCerts] = useState(false);
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -25,20 +31,31 @@ const Home = () => {
       }, 30);
 
       try {
-        const [heroRes, projectsRes, skillsRes, certsRes] = await Promise.all([
-          supabase.from("profile").select("content, avatar_url").single(),
-          supabase.from("projects").select("*"),
-          supabase
-            .from("skills")
-            .select("*")
-            .order("proficiency_level", { ascending: false }),
-          supabase
-            .from("certificates")
-            .select("*")
-            .order("issue_date", { ascending: false }),
-        ]);
+        const [heroRes, projectsRes, skillsRes, certsRes, eduRes, expRes] =
+          await Promise.all([
+            supabase.from("profile").select("content, avatar_url").single(),
+            supabase.from("projects").select("*"),
+            supabase
+              .from("skills")
+              .select("*")
+              .order("proficiency_level", { ascending: false }),
+            supabase
+              .from("certificates")
+              .select("*")
+              .order("issue_date", { ascending: false }),
+            // Fetch Education
+            supabase
+              .from("education")
+              .select("*")
+              .order("order_index", { ascending: true }),
+            // Fetch Experience
+            supabase
+              .from("experience")
+              .select("*")
+              .order("order_index", { ascending: true }),
+          ]);
 
-        // 3. Update States (Added the missing certificates update)
+        // 3. Update States
         if (heroRes.data) {
           setProfileData({
             content: heroRes.data.content,
@@ -47,7 +64,11 @@ const Home = () => {
         }
         if (projectsRes.data) setProjects(projectsRes.data);
         if (skillsRes.data) setSkills(skillsRes.data);
-        if (certsRes.data) setCertificates(certsRes.data); // FIXED: Added this line
+        if (certsRes.data) setCertificates(certsRes.data);
+
+        // ADD THESE TWO LINES:
+        if (eduRes.data) setEducation(eduRes.data);
+        if (expRes.data) setExperience(expRes.data);
 
         setProgress(100);
         setTimeout(() => setLoading(false), 800);
@@ -99,18 +120,48 @@ const Home = () => {
             <div className="h-px bg-slate-800 flex-grow mt-2"></div>
           </div>
 
+          {/* 2. Slice the projects array based on the state */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((item) => (
-              <ProjectCard key={item.id} project={item} />
-            ))}
+            {projects
+              .slice(0, showAllProjects ? projects.length : 3)
+              .map((item) => (
+                <ProjectCard key={item.id} project={item} />
+              ))}
           </div>
+
+          {/* 3. The Toggle Button */}
+          {projects.length > 3 && (
+            <div className="mt-12 flex justify-center">
+              <button
+                onClick={() => setShowAllProjects(!showAllProjects)}
+                className="group relative px-8 py-3 bg-transparent border border-blue-500/50 hover:border-blue-500 text-blue-500 font-mono text-xs tracking-widest uppercase transition-all duration-300 rounded-lg overflow-hidden"
+              >
+                <span className="relative z-10">
+                  {showAllProjects
+                    ? "CLOSE_DATABASE"
+                    : "ACCESS_REMAINDING_LOGS"}
+                </span>
+                <div className="absolute inset-0 bg-blue-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+              </button>
+            </div>
+          )}
         </section>
 
+        {/* Skills Section */}
         <div id="skills">
           <Skills skills={skills} />
         </div>
 
+        {/* Education & Experience Section */}
+        <section className="py-20 px-6 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+            <Education education={education} />
+            <Experience experience={experience} />
+          </div>
+        </section>
+
         {/* Certificates Section - REDUCED TOP PADDING */}
+        {/* Certificates Section */}
         <section
           id="certificates"
           className="relative pt-12 pb-24 px-6 max-w-7xl mx-auto"
@@ -127,11 +178,31 @@ const Home = () => {
             <div className="hidden md:block h-px bg-gradient-to-r from-emerald-500/50 to-transparent flex-grow mt-4"></div>
           </div>
 
+          {/* SLICED GRID */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {certificates.map((cert) => (
-              <CertificateCard key={cert.id} cert={cert} />
-            ))}
+            {certificates
+              .slice(0, showAllCerts ? certificates.length : 4)
+              .map((cert) => (
+                <CertificateCard key={cert.id} cert={cert} />
+              ))}
           </div>
+
+          {/* TOGGLE BUTTON FOR CERTIFICATES */}
+          {certificates.length > 4 && (
+            <div className="mt-12 flex justify-center">
+              <button
+                onClick={() => setShowAllCerts(!showAllCerts)}
+                className="group relative px-8 py-3 bg-transparent border border-emerald-500/50 hover:border-emerald-500 text-emerald-500 font-mono text-[10px] tracking-widest uppercase transition-all duration-300 rounded-lg overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  {showAllCerts
+                    ? "MINIMIZE_FILES"
+                    : `DECRYPT_${certificates.length - 4}_MORE_CLEARANCES`}
+                </span>
+                <div className="absolute inset-0 bg-emerald-500/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+              </button>
+            </div>
+          )}
         </section>
       </main>
 

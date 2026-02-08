@@ -1,0 +1,42 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+
+const Experience = ({ experience }) => {
+  return (
+    <div className="space-y-10">
+      <motion.h2 
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        className="text-3xl font-black text-white uppercase tracking-tighter flex items-center gap-3"
+      >
+        <span className="w-8 h-px bg-emerald-500"></span>
+        Field<span className="text-emerald-500">_Operations</span>
+      </motion.h2>
+
+      <div className="border-l border-slate-800 ml-4 space-y-12">
+        {experience.map((exp, index) => (
+          <motion.div 
+            key={exp.id}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: index * 0.15 }}
+            className="relative pl-8 group"
+          >
+            <div className="absolute w-3 h-3 bg-slate-900 border border-emerald-500 rounded-full -left-[6.5px] top-1.5 group-hover:bg-emerald-500 transition-colors duration-300 shadow-[0_0_10px_rgba(16,185,129,0.3)]"></div>
+            <div className="group-hover:translate-x-1 transition-transform duration-300">
+              <h3 className="text-white font-bold text-lg leading-none">{exp.role}</h3>
+              <p className="text-emerald-500 font-mono text-xs mt-1 uppercase tracking-widest">{exp.company} | {exp.duration}</p>
+              <p className="text-slate-400 text-sm mt-3 leading-relaxed max-w-md">
+                {exp.description}
+              </p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Experience;
